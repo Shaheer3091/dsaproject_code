@@ -1,352 +1,341 @@
 #include<iostream>
+#include<windows.h>
 #include<cstdlib>
 #include<ctime>
+#include<conio.h>
 
 using namespace std;
 int create=0;
 
 class organism{
-	public:
-		int id;
-		int x,y;
-		int energy;
-		int age;
-		int speed;
-		int vision;
-		int lifespan;
-		bool alive;
-		
-		
-		organism(int x,int y,int energy,int age,int speed,int vision,int lifespan,bool alive){
-			this->id=1000+create;
-			this->x=x;
-			this->y=y;
-			this->energy=energy;
-			this->age=age;
-			this->speed=speed;
-			this->vision=vision;
-			this->lifespan=lifespan;
-			this->alive=alive;
-			create++;
-		}
-		
-		
-		void display(){
-			cout<<"ID= "<<this->id<<endl;
-			cout<<"X coordinate = "<<this->x<<endl;
-			cout<<"Y coordinate = "<<this->y<<endl;
-			cout<<"Energy: "<<this->energy<<endl;
-			cout<<"Age: "<<this->age<<endl;
-			cout<<"Speed: "<<this->speed<<endl;
-			cout<<"Vision: "<<this->vision<<endl;
-			cout<<"Lifespan: "<<this->lifespan<<endl;
-			if(this->alive){
-				cout<<"This object is alive"<<endl;
-			}
-			
-			else{
-				cout<<"This object is dead"<<endl;
-			}
-		}
-		
-		void eat(){
-			if(this->alive){
-				
-				if(this->energy+10>100){
-				this->energy=100;
-				cout<<"Organisim reached its maximum capicity"<<endl;
-			}
-			
-			else{
-				this->energy+=10;
-			}
-		}}
-		
-		
-		void increaseage(){
-			if(this->alive){
-			this->age+=1;};
-			checkdeath();
-		}
-		
-		void checkdeath(){
-			if(this->age>=lifespan){
-				this->alive=false;
-			}
-			
-			if(this->energy<=0){
-				this->alive=false;
-			}
-			
-		
-		}
+    public:
+        int id;
+        int x,y;
+        int energy;
+        int age;
+        int speed;
+        int vision;
+        int lifespan;
+        bool alive;
+
+        organism(int x,int y,int energy,int age,int speed,int vision,int lifespan,bool alive){
+            this->id=1000+create;
+            this->x=x;
+            this->y=y;
+            this->energy=90;
+            this->age=age;
+            this->speed=1;
+            this->vision=2;
+            this->lifespan=lifespan;
+            this->alive=alive;
+            create++;
+        }
+
+        void display(){
+            cout<<"ID= "<<this->id<<endl;
+            cout<<"X coordinate = "<<this->x+1<<endl;
+            cout<<"Y coordinate = "<<this->y+1<<endl;
+            cout<<"Energy: "<<this->energy<<endl;
+            cout<<"Age: "<<this->age<<endl;
+            cout<<"Speed: "<<this->speed<<endl;
+            cout<<"Vision: "<<this->vision<<endl;
+            cout<<"Lifespan: "<<this->lifespan<<endl;
+            if(this->alive){
+                cout<<"This object is alive"<<endl;
+            }
+            else{
+                cout<<"This object is dead"<<endl;
+            }
+        }
+
+        void eat(){
+            if(this->alive){
+                if(this->energy+10>100){
+                    this->energy=100;
+                    //cout<<"Organisim reached its maximum capicity"<<endl;
+                }
+                else{
+                    this->energy+=10;
+                }
+            }
+        }
+
+        void increaseage(){
+            if(this->alive){
+                this->age+=1;
+            }
+            checkdeath();
+        }
+
+        bool checkdeath(){
+            if(this->age>=lifespan){
+                this->alive=false;
+                return true;
+            }
+
+            if(this->energy<=0){
+                this->alive=false;
+                return true;
+            }
+            
+            return false;
+        }
 };
 
 
 class node{
-	public:
-		organism data;
-		node* next;
-		
-		node(organism o1) : data(o1)
-        {
-        next = NULL;
+    public:
+        organism data;
+        node* next;
+
+        node(organism o1) : data(o1){
+            next = NULL;
         }
-		
-		
-//		node(organism o1){
-//			this->data=o1;
-//			next=NULL;
-//		}
-		
+
+//      node(organism o1){
+//          this->data=o1;
+//          next=NULL;
+//      }
+
 };
 
 
 class population{
-	public:
-	node* head;
-	node* tail;
-	int count;
-	
-	
-	population(){
-		count = 0;
-		head=NULL;
-		tail=NULL;
-	}
-	
-void insertatend(organism o1){
-	
-	if(count==100){
-		cout<<"Maximum population reached"<<endl;
-		return;
-	}
-	
-	
-	node* newnode = new node(o1);
+    public:
+        node* head;
+        node* tail;
+        int count;
 
-	if(head==NULL){
-		head=newnode;
-		tail=newnode;
-		count++;
-		 
-		return;
-	}
-	
-	tail->next=newnode;
-	tail=newnode;
-	count++;
-	 
-	
-}
-
-void traverse(){
-	node* temp = head;
-	
-	
-	while(temp!=NULL){
-		 temp->data.display();
-		 cout<<endl;
-		 temp=temp->next;
-	}	
-}
-
-node* search(int id){
-	node* temp = head;
-	
-	while(temp && temp->data.id!=id){
-		
-		 temp=temp->next;
-	}
-	
-	return temp;
-}
-
-
-
-
-
-
-//void search(int id){
-//	node* temp = head;
-//	
-//	
-//	while(temp->data.id!=id){
-//		 if(temp==NULL){
-//		 	return temp;
-//		 }
-//		 temp=temp->next;
-//	}
-//	
-//	return temp;
-//}
-
-void deleteorg(int id){
-    node* temp = head;
-    node* pre = NULL;
-
-    while(temp){
-        if(temp->data.id == id){
-
-            if(head == tail){
-                head = NULL;
-                tail = NULL;
-            }
-            else if(temp == head){
-                head = head->next;
-            }
-            else if(temp == tail){
-                tail = pre;
-                tail->next = NULL;
-            }
-            else{
-                pre->next = temp->next;
-            }
-
-            delete temp;
-            count--;
-
-            cout<<"Deleted Successfully"<<endl;
-            return;
+        population(){
+            count = 0;
+            head=NULL;
+            tail=NULL;
         }
 
-        pre = temp;
-        temp = temp->next;
-    }
+        void insertatend(organism o1){
+            if(count==100){
+                cout<<"Maximum population reached"<<endl;
+                return;
+            }
 
-    cout<<"No such id found"<<endl;
-}
-int getcount(){
-	return count;
-}
+            node* newnode = new node(o1);
 
+            if(head==NULL){
+                head=newnode;
+                tail=newnode;
+                count++;
+                return;
+            }
+
+            tail->next=newnode;
+            tail=newnode;
+            count++;
+        }
+
+        void traverse(){
+            node* temp = head;
+
+            while(temp!=NULL){
+                temp->data.display();
+                cout<<endl;
+                temp=temp->next;
+            }
+        }
+
+        node* search(int id){
+            node* temp = head;
+
+            while(temp && temp->data.id!=id){
+                temp=temp->next;
+            }
+
+            return temp;
+        }
+
+//      void search(int id){
+//          node* temp = head;
+//
+//          while(temp->data.id!=id){
+//              if(temp==NULL){
+//                  return temp;
+//              }
+//              temp=temp->next;
+//          }
+//
+//          return temp;
+//      }
+
+        void deleteorg(int id){
+            node* temp = head;
+            node* pre = NULL;
+
+            while(temp){
+                if(temp->data.id == id){
+
+                    if(head == tail){
+                        head = NULL;
+                        tail = NULL;
+                    }
+                    else if(temp == head){
+                        head = head->next;
+                    }
+                    else if(temp == tail){
+                        tail = pre;
+                        tail->next = NULL;
+                    }
+                    else{
+                        pre->next = temp->next;
+                    }
+
+                    delete temp;
+                    count--;
+
+                    cout<<"Deleted Successfully"<<endl;
+                    return;
+                }
+
+                pre = temp;
+                temp = temp->next;
+            }
+
+            cout<<"No such id found"<<endl;
+        }
+
+        int getcount(){
+            return count;
+        }
 };
 
 class world{
-	char arr[20][30];
-	public:
-	world(){
-		for(int i=0; i<20; i++){
-			for(int j=0; j<30; j++){
-				arr[i][j]='.';
-				
+
+    public:
+    	char arr[20][30];
+        world(){
+            for(int i=0; i<20; i++){
+                for(int j=0; j<30; j++){
+                    arr[i][j]='.';
+                }
+            }
+        }
+
+        void display(){
+            for(int i=0; i<20; i++){
+                for(int j=0; j<30; j++){
+                    cout<<arr[i][j]<<" ";
+                }
+                cout<<endl;
+            }
+        }
+
+        bool isempty(int x,int y){
+            if(isvalid(x,y)){
+                if(arr[x][y] == '.'){
+                    return true;
+                }
+                return false;
+            }
+
+            return false;
+        }
+
+        bool placefood(int x,int y){
+            if(isvalid(x,y)){
+                if(isempty(x,y)){
+                    arr[x][y]='*';
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+        bool place_obstacle(int x,int y){
+            if(isvalid(x,y)){
+                if(isempty(x,y)){
+                    arr[x][y]='#';
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+        bool removefood(int x,int y){
+            if(isvalid(x,y)){
+                if(arr[x][y]=='*'){
+                    arr[x][y]='.';
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+        
+		bool isFood(int x, int y){
+        	if(isvalid(x,y)){
+        		if(arr[x][y] == '*'){
+        		return true;
+			}
+			else{
+				return false;	
 			}
 		}
-	}
-	
-	void display(){
-			for(int i=0; i<20; i++){
-			for(int j=0; j<30; j++){
-				cout<<arr[i][j]<<" ";
-			}
-			cout<<endl;
-		}
-	}
-	
-	bool isempty(int x , int y ){
-	if(isvalid(x,y)){
-	
-	if(arr[x][y]=='.'){
-		return true;
-	}
-	return false;
-    }
-    
-    return false;
-	
-	}
-    
-    
-    bool placefood(int x , int y){
-    if(isvalid(x,y)){
-		
-		if(isempty(x,y)){
-    		arr[x][y]='*';
-            return true;
-		}
-		
-		return false;
-			
-	}
-	
-	return false;
-    }
-    
-    
-    bool place_obstacle(int x , int y){
-    if(isvalid(x,y)){	
-    	
-		if(isempty(x,y)){
-    		arr[x][y]='#';
-            return true;
-		}
-		
-		return false;
-			
-	}
-	
-	return false;
-}
-	
-    bool removefood(int x , int y){
-    if(isvalid(x,y)){	
-		if(arr[x][y]=='*') {
-    		arr[x][y]='.';
-            return true;
-		}
-		
-		 return false;
-			
-	}
-	return false;
-}
-    bool place_organism(int x , int y){
-    if(isvalid(x,y)){
-		if(isempty(x,y)){
-    		arr[x][y]='O';
-            return true;
-		}
-		
-		 return false;
-	}
-	
-	return false;
-}
-    bool remove_organism(int x , int y){
-    if(isvalid(x,y)){
-		if(arr[x][y]=='O') {
-    		arr[x][y]='.';
-            return true;
-		}
-		
-		 return false;
-	}
-	
-	return false;
-}
-	
-	
-	
-	bool isvalid(int x,int y){
-		if(x<0||x>=20||y<0||y>=30){
+		else{
 			return false;
 		}
-		
-		return true;
 	}
-		
-	
+
+        bool place_organism(int x,int y){
+            if(isvalid(x,y)){
+                if(isempty(x,y)){
+                    arr[x][y]='O';
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+        bool remove_organism(int x,int y){
+            if(isvalid(x,y)){
+                if(arr[x][y]=='O'){
+                    arr[x][y]='.';
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+        
+ 
+
+        bool isvalid(int x,int y){
+            if(x < 0 || x >= 20 || y < 0 || y >= 30){
+                return false;
+            }
+
+            return true;
+        }
 };
 
 class History{
-	public:
-		int generation;
-		int population;
-		int births;
-		int deaths;
-		int food;
-		
-		
+    public:
+        int generation;
+        int population;
+        int births;
+        int deaths;
+        int food;
+
         History(int generation,int population,int food,int births,int deaths){
             this->generation=generation;
             this->population=population;
@@ -354,14 +343,14 @@ class History{
             this->births=births;
             this->deaths=deaths;
         }
-		
-		display(){
-			cout << "\n---------The History Record---------\n";
-			cout << "\nGenerations: " << generation;
-			cout << "\nPopulations: " << population;
-			cout << "\nTotal Births: " << births;
-			cout << "\nTotal Deaths: " << deaths << endl;
-		}
+
+        void display(){
+            cout << "\n---------The History Record---------\n";
+            cout << "\nGenerations: " << generation;
+            cout << "\nPopulations: " << population;
+            cout << "\nTotal Births: " << births;
+            cout << "\nTotal Deaths: " << deaths << endl;
+        }
 };
 
 class HistoryNode{
@@ -377,18 +366,18 @@ class HistoryNode{
 class HistoryStack{
     public:
         HistoryNode* top;
-        int count;
+        int counth;
 
         HistoryStack(){
             top=NULL;
-            count=0;
+            counth=0;
         }
 
         void push(History h){
             HistoryNode* n=new HistoryNode(h);
             n->next=top;
             top=n;
-            count++;
+            counth++;
         }
 
         void pop(){
@@ -399,7 +388,7 @@ class HistoryStack{
             HistoryNode* temp=top;
             top=top->next;
             delete temp;
-            count--;
+            counth--;
         }
 
         void peek(){
@@ -424,18 +413,19 @@ class HistoryStack{
         }
 };
 
-#include<iostream>
-using namespace std;
 class Event{
-    public: 
+    public:
         int eventid;
         int organismid;
         int type;
         int generation;
 
         Event(){
-
-        } 
+            this->eventid=0;
+            this->organismid=0;
+            this->type=0;
+            this->generation=0;
+        }
 
         Event(int eventid,int organismid,int type,int generation){
             this->eventid=eventid;
@@ -447,159 +437,388 @@ class Event{
         void display(){
             cout<<"Event "<<eventid<<": ";
 
-            if(type==1)
+            if(type==1){
                 cout<<"Organism "<<organismid<<" was born";
-
-            else if(type==2)
+            }
+            else if(type==2){
                 cout<<"Organism "<<organismid<<" died";
-
-            else if(type==3)
+            }
+            else if(type==3){
                 cout<<"Organism "<<organismid<<" found food";
-
-            else if(type==4)
+            }
+            else if(type==4){
                 cout<<"Organism "<<organismid<<" mutated";
+            }
 
             cout<<" (Generation "<<generation<<")"<<endl;
         }
 };
 
 class EventNode{
-        public:
+    public:
         Event eventdata;
         EventNode* next;
 
         EventNode(Event e1){
-this->eventdata=e1;
-next=NULL;
+            this->eventdata=e1;
+            next=NULL;
         }
 };
 
 class EventQueue{
-public:
+    public:
         EventNode* head;
         EventNode* tail;
-        int count;
-        
+        int counte;
 
-EventQueue(){
-         head= NULL;
-         tail= NULL;
-        count=0;
+        EventQueue(){
+            head= NULL;
+            tail= NULL;
+            counte=0;
+        }
 
-}
+        void push(Event e1){
+            EventNode* neweventnode=new EventNode(e1);
+            if(empty()){
+                head=tail=neweventnode;
+            }
+            else{
+                tail->next=neweventnode;
+                tail=neweventnode;
+            }
+        }
 
-void push(Event e1){
-EventNode* neweventnode=new EventNode(e1);
-if(empty()){
-head=tail=neweventnode;
-}
-else{
-        tail->next=neweventnode;
-        tail=neweventnode;
-}
-}
+        void pop(){
+            if(empty()){
+                cout<<"error, empty list";
+            }
+            else{
+                EventNode*temp=head;
+                head=head->next;
+                delete temp;
+            }
+        }
 
-void pop(){
-if(empty()){
-cout<<"error, empty list";
-}
-else{
-        EventNode*temp=head;
-        head=head->next;
-        delete temp;
-}
-}
+        EventNode front(){
+            return head->eventdata;
+        }
 
-EventNode front(){
-return head->eventdata;
-}
-
-bool empty(){
-if(head==NULL){
-return true;
-}
-else{
-        return false;
-}
-}
-//front returns head->data
-//push inserts at tail, then update
-//pop deletes queue ke front ka data 
-//for pop just move head to the right
-
-
+        bool empty(){
+            if(head==NULL){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        //front returns head->data
+        //push inserts at tail, then update
+        //pop deletes queue ke front ka data
+        //for pop just move head to the right
 };
 
 class simulation{
-	
-	public:
-	world w;
-	population p;
-//	eventqueue events;
-//	historystack history;
-	int generation=0;
-	int foodcount=0;
-	int obstaclecount=0;
-	int totalbirths=0;
-	int totaldeaths=0;
-	
-	simulation(){
-		this->generation=0;
-		this->foodcount=0;
-		this->obstaclecount=0;
-		this->totalbirths=0;
-		this->totaldeaths= 0;
-	}
-	simulation(int generation,int foodcount,int obstaclecount,int totalbirths,int totaldeaths){
-		this->generation=generation;
-		this->foodcount=foodcount;
-		this->obstaclecount=obstaclecount;
-		this->totalbirths=totalbirths;
-		this->totaldeaths=totaldeaths;
-	}
-	
-	
-	void initialize(){
-		//world initialized already
+
+    public:
+        world w;
+        population p;
+        EventQueue events;
+        HistoryStack history;
+        int generation;
+        int foodcount;
+        int obstaclecount;
+        int totalbirths;
+        int totaldeaths;
+
+        simulation(){
+            this->generation=0;
+            this->foodcount=0;
+            this->obstaclecount=0;
+            this->totalbirths=0;
+            this->totaldeaths= 0;
+        }
+
+        simulation(int generation,int foodcount,int obstaclecount,int totalbirths,int totaldeaths){
+            this->generation=generation;
+            this->foodcount=foodcount;
+            this->obstaclecount=obstaclecount;
+            this->totalbirths=totalbirths;
+            this->totaldeaths=totaldeaths;
+        }
+
+        void initialize(){
+            //world initialized already
+
+            //placing 15 random obstacle
+            int i = 0;
+            while(i < 15){
+                if(w.place_obstacle(rand() % 20,rand() % 30)){
+                    i++;
+                }
+            }
+
+            //placing 50 food units
+            i = 0;
+            while(i < 50){
+                if(w.placefood(rand() % 20,rand() % 30)){
+                    i++;
+                }
+            }
+
+            //placing 10 organisms
+            i=0;
+            while(i<10){
+                int a=rand() % 20;
+                int b=rand() % 30;
+                if(w.place_organism(a,b)){
+                    organism org = organism(a,b,rand() % 100,rand() % 30,rand() % 5,rand() % 3,rand() % 31 + 70,true);
+                    this->p.insertatend(org);
+                    i++;
+                }
+            }
+
+            //food count and obstacle count
+            this->foodcount=50;
+            this->obstaclecount=15;
+        }
+        
+     void feedorganism(){
+        node*temp =p.head;
+        while(temp!=NULL ){
+            if(temp->data.alive){
+                if(w.isFood(temp->data.x,temp->data.y)){
+                temp->data.eat();
+                w.removefood(temp->data.x,temp->data.y);
+                foodcount--;
+                }
+                }
+                temp=temp->next;
+            }
+
+        }
+        
+            void removingdead(){
+   	node* temp = p.head;
+   	
+   	while(temp){
+   		if(!temp->data.alive){
+   			 w.remove_organism(temp->data.x,temp->data.y);
+   			 p.deleteorg(temp->data.id);
+   			 this->totaldeaths++;
+		   }
+	   }
+   }
+    
+    
+        
+        
+        
+        
+       void moveOrgs(){
+            node* temp = p.head;
+            while(temp){
+                if(!temp->data.alive){
+                    temp = temp->next;
+                    continue;
+                }
+
+                int x = temp->data.x;
+                int y = temp->data.y;
+                if(isSafe(&x, &y, temp->data.speed, temp)){
+                    w.remove_organism(temp->data.x, temp->data.y);
+                    temp->data.x = x;
+                    temp->data.y = y;
+                    w.place_organism(x, y);
+                }
+                temp = temp->next;
+            }
+        }
+	private:	
+		//Default Direction -> random
+		//Speed -> Within range from speed to 1
 		
-		 //placing 15 random obstacle
-		 int i=0;
-		 while(i<15){	
-			if(w.place_obstacle(rand() % 20,rand() % 30)){
-				i++;
-			}	
+	bool isSafe(int *x, int *y, int factor, node* temp){
+            if(factor < 1){
+                return false;
+            }
+
+            int selectRandomly = rand() % 4;
+
+            if(selectRandomly == 0){
+                if(temp->data.energy >= factor && validatePathHorizontally(*x, *y + factor, temp) && isValidIndices(*x, *y + factor, temp)){
+                    *y += factor;
+                    temp->data.energy -= (2 * factor);
+ 					if(temp->data.checkdeath()){
+ 						removingdead();
+					 }
+                    return true;
+                }
+                else{
+                    selectRandomly++;
+                }
+            }
+            else if(selectRandomly == 1){
+                if(temp->data.energy >= factor && validatePathVertically(*x + factor, *y, temp) && isValidIndices(*x + factor, *y, temp)){
+                    *x += factor;
+                    temp->data.energy -= (2 * factor);
+ 					if(temp->data.checkdeath()){
+ 						removingdead();
+					 }
+                    return true;
+                }
+                else{
+                    selectRandomly++;
+                }
+            }
+            else if(selectRandomly == 2){
+                if(temp->data.energy >= factor && validatePathHorizontallyB(*x, *y - factor, temp) && isValidIndices(*x, *y - factor, temp)){
+                    *y -= factor;
+ 					if(temp->data.checkdeath()){
+ 						removingdead();
+					 }
+                    
+                    return true;
+                }
+                else{
+                    selectRandomly++;
+                }
+            }
+            else{
+                if(temp->data.energy >= factor && validatePathVerticallyB(*x - factor, *y, temp) && isValidIndices(*x - factor, *y, temp)){
+                    *x -= factor;
+ 					temp->data.energy -= (2 * factor);
+ 					if(temp->data.checkdeath()){
+ 						removingdead();
+					 }
+ 					
+                    return true;
+                }
+            }
+
+            if(isSafe(x, y, factor - 1, temp)){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        
+		bool isValidIndices(int x, int y, node* temp){
+            if(w.isempty(x, y)){
+                return true;
+            }
+            else if(w.isFood(x, y)){
+//                feedOrg(x, y, temp);
+                feedorganism();
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+		bool validatePathHorizontally(int x, int y, node* temp){
+            if(!w.isvalid(x, y)){
+                return false;
+            }
+            for(int j = temp->data.y + 1; j <= y; j++){
+                if(w.arr[x][j] == '#' || w.arr[x][j] == 'O'){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool validatePathHorizontallyB(int x, int y, node* temp){
+            if(!w.isvalid(x, y)){
+                return false;
+            }
+            for(int j = temp->data.y - 1; j >= y; j--){
+                if(w.arr[x][j] == '#' || w.arr[x][j] == 'O'){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool validatePathVertically(int x, int y, node* temp){
+            if(!w.isvalid(x, y)){
+                return false;
+            }
+            for(int i = temp->data.x + 1; i <= x; i++){
+                if(w.arr[i][y] == '#' || w.arr[i][y] == 'O'){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool validatePathVerticallyB(int x, int y, node* temp){
+            if(!w.isvalid(x, y)){
+                return false;
+            }
+            for(int i = temp->data.x - 1; i >= x; i--){
+                if(w.arr[i][y] == '#' || w.arr[i][y] == 'O'){
+                    return false;
+                }
+            }
+            return true;
+        }
+//		void feedOrg(int x, int y, node* temp){
+//			w.removefood(x, y);
+//			temp->data.eat();
+//		}
+		
+		
+		
+		
+	void updateorganism(){
+	node* temp = p.head;
+	
+	while(temp){
+		if(temp->data.alive){
+			temp->data.age++;
+			if(temp->data.energy-1 >= 0){	
+			temp->data.energy--;
 		}
-		
-		//placing 50 food units
-		i=0;
-		while(i<50){	
-			if(w.placefood(rand() % 20,rand() % 30)){
-				i++;
-			}	
+			temp->data.checkdeath();
 		}
-		
- 
-		
-		//placing 10 organisms
-		i=0;
-		while(i<10){	
-			int a=rand() % 20;
-			int b=rand() % 30;
-			if(w.place_organism(a,b)){
-				organism org=organism(a,b,rand() % 100,rand() % 30,rand() % 5,rand() % 3,rand() % 31 + 70,true);
-				this->p.insertatend(org);
-				i++;
-			}	
-		}
-		
-		//food count and obstacle count
-		this->foodcount=50;
-		this->obstaclecount=15; 		
+		temp=temp->next;
 	}
- 
+	
+}
+
+//
+//    void removingdead(){
+//   	node* temp = p.head;
+//   	
+//   	while(temp){
+//   		if(!temp->data.alive){
+//   			 w.remove_organism(temp->data.x,temp->data.y);
+//   			 p.deleteorg(temp->data.id);
+//   			 this->totaldeaths++;
+//		   }
+//	   }
+//   }
 };
 
-
+//int main(){
+//    srand(time(0));
+//
+//    simulation s;
+//    s.initialize();
+//	
+//	
+//	while(true){
+//		system("cls");
+//		s.w.display();
+//		Sleep(2500000);
+//		s.p.traverse();
+//		s.moveOrgs();
+//		 
+//	};
+//     
+//}
 
 int main(){
     srand(time(0));
@@ -607,6 +826,69 @@ int main(){
     simulation s;
     s.initialize();
 
+    // Display initial grid
     s.w.display();
-    s.p.traverse();
+
+    while(true){
+
+        // Check keyboard input
+        if(_kbhit()){
+            char key = _getch();
+
+            // Pause simulation
+            if(key == ' '){
+
+                system("cls");
+
+                cout << "========== SIMULATION PAUSED ==========" << endl;
+                cout << "Press SPACE to resume or ESC to exit." << endl;
+                cout << endl;
+
+                // Display frozen grid
+                s.w.display();
+
+                cout << endl;
+                cout << "========== ORGANISM DETAILS ==========" << endl;
+                cout << endl;
+
+                // Display all organisms only once
+                s.p.traverse();
+
+                cout << endl;
+                cout << "======================================" << endl;
+                cout << "Press SPACE to resume simulation." << endl;
+
+                // Wait until user presses Space or Escape
+                while(true){
+
+                    char pauseKey = _getch();
+
+                    if(pauseKey == ' '){
+                        break;
+                    }
+
+                    if(pauseKey == 27){
+                        return 0;
+                    }
+                }
+
+                system("cls");
+            }
+
+            // Exit simulation
+            else if(key == 27){
+                break;
+            }
+        }
+
+        // Continue organism movement
+        s.moveOrgs();
+
+        system("cls");
+        s.w.display();
+
+        Sleep(250);
+    }
+
+    return 0;
 }
